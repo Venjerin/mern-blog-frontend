@@ -6,11 +6,16 @@ import Button from "@mui/material/Button";
 
 import styles from "./Login.module.scss";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { fetchAuth } from "../../redux/slices/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAuth, selectIsAuth } from "../../redux/slices/auth";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const isAuth = useSelector(selectIsAuth)
+
+
   const { register, handleSubmit, setError, formState: {errors, isValid} } = useForm({
     defaultValues: {
       email: 'john.doe@example.com',
@@ -21,6 +26,10 @@ export const Login = () => {
 
   const onSubmit = (values) => {
     dispatch(fetchAuth(values))
+  }
+
+  if(isAuth){
+    navigate('/')
   }
   return (
     <Paper classes={{ root: styles.root }}>
